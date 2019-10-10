@@ -1,2 +1,2 @@
 -r non-tensorflow-requirements.txt
-tensorflow==0.12.0
+tensorflow==1.14.0

@@ -61,7 +61,7 @@ def conv_linear(arg, kw, kh, nout, prefix, bias=0):
     if len(arg) == 1:
       arg = arg[0]
     else:
-      arg = tf.concat(len(mytf.shape_list(arg[0]))-1, arg)
+      arg = tf.concat(axis=len(mytf.shape_list(arg[0]))-1, values=arg)
   nin = mytf.shape_list(arg)[-1]
   with tf.variable_scope(prefix):
     k = tf.get_variable("CvK", [kw, kh, nin, nout])
@@ -190,7 +190,7 @@ class NeuralGPUAtSize(object):
         if FLAGS.output_layer == 1:
           output += cur
         else:
-          cur = tf.select(tf.greater_equal(self.output_layers, index + it), cur, old)
+          cur = tf.where(tf.greater_equal(self.output_layers, index + it), cur, old)
     if FLAGS.output_layer == 1:
       return (cur, index + self.config.rx_step, output)
     else:
@@ -266,7 +266,7 @@ class NeuralGPUAtSize(object):
 
     # Calculate cross-entropy loss and normalize it.
     targets = tf.one_hot(self.target, noclass)
-    xent = mytf.softmax_cross_entropy_with_logits(output, targets) # shape: batch x length
+    xent = tf.nn.softmax_cross_entropy_with_logits(logits=output, labels=targets) # shape: batch x length
     perp_loss = tf.reduce_mean(xent * tf.reshape(mask, [-1, self.length]))
 
     # Final loss: cross-entropy + shared parameter relaxation part.
@@ -337,7 +337,7 @@ class NeuralGPU(object):
 
     with tf.variable_scope("model") as vs:
       self.construct_graph()
-      self.saver = tf.train.Saver(tf.all_variables())
+      self.saver = tf.train.Saver(tf.global_variables())
 
   def construct_graph(self):
     vec_size = self.config.nmaps

@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:0.12.1-gpu
+FROM tensorflow/tensorflow:1.14.0-gpu
 
 RUN apt update && apt install -y git
 

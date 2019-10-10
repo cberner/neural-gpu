@@ -30,7 +30,7 @@ def broadcast_as(origin, target, axes=None):
 
 def stack(tensor_list, ax):
   """Stack many tensors along a single axis"""
-  return tf.concat(ax, [tf.expand_dims(t, ax) for t in tensor_list])
+  return tf.concat(axis=ax, values=[tf.expand_dims(t, ax) for t in tensor_list])
 
 def shape_list(tensor):
   """Return the tensor shape in a form tf.reshape understands."""
@@ -104,12 +104,12 @@ def batch_norm(x, phase_train, mask=None, scope='bn'):
     BN_DECAY = 0.8
     BN_EPSILON = 1e-3
     with tf.variable_scope(scope) as vs:
-        beta = tf.get_variable('beta', params_shape, initializer=tf.zeros_initializer)
-        gamma = tf.get_variable('gamma', params_shape, initializer=tf.ones_initializer)
+        beta = tf.get_variable('beta', params_shape, initializer=tf.zeros_initializer())
+        gamma = tf.get_variable('gamma', params_shape, initializer=tf.ones_initializer())
         moving_mean = tf.get_variable('moving_mean', params_shape,
-                                      initializer=tf.zeros_initializer, trainable=False)
+                                      initializer=tf.zeros_initializer(), trainable=False)
         moving_var = tf.get_variable('moving_var', params_shape,
-                                     initializer=tf.ones_initializer, trainable=False)
+                                     initializer=tf.ones_initializer(), trainable=False)
         axes = range(len(x_shape)-1)
         if mask is None:
             batch_mean, batch_var = tf.nn.moments(x, axes, name='moments')
@@ -153,11 +153,11 @@ def softmax_index2d(indices, values, reduce = False):
     indices_shape)
   softmax_indices = tf.complex(softmax_indices, tf.zeros_like(softmax_indices))
   values = tf.complex(values, tf.zeros_like(values))
-  fft_of_answer = tf.conj(tf.batch_fft2d(softmax_indices)) * tf.batch_fft2d(values)
+  fft_of_answer = tf.conj(tf.fft2d(softmax_indices)) * tf.fft2d(values)
   if reduce:
-    return tf.reduce_mean(tf.real(tf.batch_ifft(fft_of_answer)), -2)
+    return tf.reduce_mean(tf.real(tf.ifft(fft_of_answer)), -2)
   else:
-    return tf.real(tf.batch_ifft2d(fft_of_answer))
+    return tf.real(tf.ifft2d(fft_of_answer))
 
 def softmax_index1d(indices, values):
   # indices: bs x height x length 
@@ -166,5 +166,5 @@ def softmax_index1d(indices, values):
   softmax_indices = softmax(indices)
   softmax_indices = tf.complex(softmax_indices, tf.zeros_like(softmax_indices))
   values = tf.complex(values, tf.zeros_like(values))
-  fft_of_answer = tf.conj(tf.batch_fft(softmax_indices)) * tf.batch_fft(values)
-  return tf.real(tf.batch_ifft(fft_of_answer))
+  fft_of_answer = tf.conj(tf.fft(softmax_indices)) * tf.fft(values)
+  return tf.real(tf.ifft(fft_of_answer))

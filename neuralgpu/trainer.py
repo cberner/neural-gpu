@@ -36,71 +36,67 @@ from .generators import generators
 from .model import NeuralGPU
 
 
-def define_flags():
-  """This is placed in a function so reload() works"""
-  tf.app.flags.DEFINE_float("lr", 0.001, "Learning rate.")
-  tf.app.flags.DEFINE_float("init_weight", 1.0, "Initial weights deviation.")
-  tf.app.flags.DEFINE_float("max_grad_norm", 1.0, "Clip gradients to this norm.")
-  tf.app.flags.DEFINE_float("cutoff", 1.2, "Cutoff at the gates.")
-  tf.app.flags.DEFINE_float("cutoff_tanh", 0.0, "Cutoff at tanh.")
-  tf.app.flags.DEFINE_float("pull", 0.0005, "Starting pull of the relaxations.")
-  tf.app.flags.DEFINE_float("pull_incr", 1.2, "Increase pull by that much.")
-  tf.app.flags.DEFINE_float("curriculum_bound", 0.15, "Move curriculum < this.")
-  tf.app.flags.DEFINE_float("dropout", 0.15, "Dropout that much.")
-  tf.app.flags.DEFINE_integer("max_steps", 0, "Quit after this many steps.")
-  tf.app.flags.DEFINE_integer("batch_size", 32, "Batch size.")
-  tf.app.flags.DEFINE_integer("low_batch_size", 16, "Low batch size.")
-  tf.app.flags.DEFINE_integer("steps_per_epoch", 200, "Steps per epoch.")
-  tf.app.flags.DEFINE_integer("nmaps", 24, "Number of floats in each cell.")
-  tf.app.flags.DEFINE_integer("niclass", 33, "Number of classes (0 is padding).")
-  tf.app.flags.DEFINE_integer("noclass", 33, "Number of classes (0 is padding).")
-  tf.app.flags.DEFINE_integer("max_length", 41, "Maximum length.")
-  tf.app.flags.DEFINE_integer("rx_step", 6, "Relax that many recursive steps.")
-  tf.app.flags.DEFINE_integer("random_seed", 125459, "Random seed.")
-  tf.app.flags.DEFINE_integer("time_till_ckpt", 30, "How many tests per checkpoint")
-  tf.app.flags.DEFINE_integer("time_till_eval", 2, "Number of steps between evals")
-  tf.app.flags.DEFINE_integer("nconvs", 2, "How many convolutions / 1 step.")
-  tf.app.flags.DEFINE_integer("kw", 3, "Kernel width.")
-  tf.app.flags.DEFINE_integer("kh", 3, "Kernel height.")
-  tf.app.flags.DEFINE_integer("height", 4, "Height.")
-  tf.app.flags.DEFINE_integer("forward_max", 401, "Maximum forward length.")
-  tf.app.flags.DEFINE_integer("nprint", 0, "How many test examples to print out.")
-  tf.app.flags.DEFINE_integer("mode", 0, "Mode: 0-train other-decode.")
-  tf.app.flags.DEFINE_bool("animate", False, "Whether to produce an animation.")
-  tf.app.flags.DEFINE_float("smooth_grad", 0.0, "Whether to avoid clipping gradient")
-  tf.app.flags.DEFINE_float("smooth_grad_tanh", 0.0, "Whether to avoid clipping tanh gradient")
-  tf.app.flags.DEFINE_string("task", "badd", "Which task are we learning?")
-  tf.app.flags.DEFINE_string("train_dir", "/tmp/neural", "Directory to store models.")
+tf.app.flags.DEFINE_float("lr", 0.001, "Learning rate.")
+tf.app.flags.DEFINE_float("init_weight", 1.0, "Initial weights deviation.")
+tf.app.flags.DEFINE_float("max_grad_norm", 1.0, "Clip gradients to this norm.")
+tf.app.flags.DEFINE_float("cutoff", 1.2, "Cutoff at the gates.")
+tf.app.flags.DEFINE_float("cutoff_tanh", 0.0, "Cutoff at tanh.")
+tf.app.flags.DEFINE_float("pull", 0.0005, "Starting pull of the relaxations.")
+tf.app.flags.DEFINE_float("pull_incr", 1.2, "Increase pull by that much.")
+tf.app.flags.DEFINE_float("curriculum_bound", 0.15, "Move curriculum < this.")
+tf.app.flags.DEFINE_float("dropout", 0.15, "Dropout that much.")
+tf.app.flags.DEFINE_integer("max_steps", 0, "Quit after this many steps.")
+tf.app.flags.DEFINE_integer("batch_size", 32, "Batch size.")
+tf.app.flags.DEFINE_integer("low_batch_size", 16, "Low batch size.")
+tf.app.flags.DEFINE_integer("steps_per_epoch", 200, "Steps per epoch.")
+tf.app.flags.DEFINE_integer("nmaps", 24, "Number of floats in each cell.")
+tf.app.flags.DEFINE_integer("niclass", 33, "Number of classes (0 is padding).")
+tf.app.flags.DEFINE_integer("noclass", 33, "Number of classes (0 is padding).")
+tf.app.flags.DEFINE_integer("max_length", 41, "Maximum length.")
+tf.app.flags.DEFINE_integer("rx_step", 6, "Relax that many recursive steps.")
+tf.app.flags.DEFINE_integer("random_seed", 125459, "Random seed.")
+tf.app.flags.DEFINE_integer("time_till_ckpt", 30, "How many tests per checkpoint")
+tf.app.flags.DEFINE_integer("time_till_eval", 2, "Number of steps between evals")
+tf.app.flags.DEFINE_integer("nconvs", 2, "How many convolutions / 1 step.")
+tf.app.flags.DEFINE_integer("kw", 3, "Kernel width.")
+tf.app.flags.DEFINE_integer("kh", 3, "Kernel height.")
+tf.app.flags.DEFINE_integer("height", 4, "Height.")
+tf.app.flags.DEFINE_integer("forward_max", 401, "Maximum forward length.")
+tf.app.flags.DEFINE_integer("nprint", 0, "How many test examples to print out.")
+tf.app.flags.DEFINE_integer("mode", 0, "Mode: 0-train other-decode.")
+tf.app.flags.DEFINE_bool("animate", False, "Whether to produce an animation.")
+tf.app.flags.DEFINE_float("smooth_grad", 0.0, "Whether to avoid clipping gradient")
+tf.app.flags.DEFINE_float("smooth_grad_tanh", 0.0, "Whether to avoid clipping tanh gradient")
+tf.app.flags.DEFINE_string("task", "badd", "Which task are we learning?")
+tf.app.flags.DEFINE_string("train_dir", "/tmp/neural", "Directory to store models.")
 
-  tf.app.flags.DEFINE_float("layer_scale", 1.0, "Number of layers to use")
+tf.app.flags.DEFINE_float("layer_scale", 1.0, "Number of layers to use")
 
-  # Batchnorm:     0 = none
-  #                2 = correct
-  #                1 = not quite correct, because of how masking is done, but simpler.
-  tf.app.flags.DEFINE_integer("do_batchnorm", 0, "Whether to use batch normalization.")
+# Batchnorm:     0 = none
+#                2 = correct
+#                1 = not quite correct, because of how masking is done, but simpler.
+tf.app.flags.DEFINE_integer("do_batchnorm", 0, "Whether to use batch normalization.")
 
-  tf.app.flags.DEFINE_bool("do_resnet", False, "Whether to use resnets.")
+tf.app.flags.DEFINE_bool("do_resnet", False, "Whether to use resnets.")
 
-  tf.app.flags.DEFINE_bool("print_one", True, "Print one example each evaluation")
+tf.app.flags.DEFINE_bool("print_one", True, "Print one example each evaluation")
 
-  # output layer: 0 = standard: output layer n on length-n inputs
-  #               1 = alternate: output sum of first n layers on length-n inputs.
-  tf.app.flags.DEFINE_integer("output_layer", 0, "Which layer to output.")
+# output layer: 0 = standard: output layer n on length-n inputs
+#               1 = alternate: output sum of first n layers on length-n inputs.
+tf.app.flags.DEFINE_integer("output_layer", 0, "Which layer to output.")
 
-  # progressive_curriculum: 0 = none: always train on first task.
-  #                         1-5: progress through the tasks in sequence,
-  #                              training each one to length max_len then move on.
-  #                              The different options have subtle changes; see
-  #                              BetterCurriculum for details.
-  #                              5 is probably the best one.
-  tf.app.flags.DEFINE_integer("progressive_curriculum", 0, "Whether to use progressive curriculum.")
-  tf.app.flags.DEFINE_bool("taskid", False, "Feed task id to algorithm in each layer")
+# progressive_curriculum: 0 = none: always train on first task.
+#                         1-5: progress through the tasks in sequence,
+#                              training each one to length max_len then move on.
+#                              The different options have subtle changes; see
+#                              BetterCurriculum for details.
+#                              5 is probably the best one.
+tf.app.flags.DEFINE_integer("progressive_curriculum", 0, "Whether to use progressive curriculum.")
+tf.app.flags.DEFINE_bool("taskid", False, "Feed task id to algorithm in each layer")
 
-  tf.app.flags.DEFINE_bool("always_large", False, "Perform the large test even when the model is inaccurate")
+tf.app.flags.DEFINE_bool("always_large", False, "Perform the large test even when the model is inaccurate")
 
 FLAGS = tf.app.flags.FLAGS
-if not FLAGS.__parsed: # Hack so reload() works
-  define_flags()
 
 EXTRA_EVAL = 2
 
@@ -131,7 +127,7 @@ def log_parameters(checkpoint_dir):
     f.write(' '.join(sys.argv)+'\n')
 
   with open(os.path.join(checkpoint_dir, 'all_args'), 'w') as f:
-    yaml.dump(FLAGS.__flags, f, default_flow_style=False)
+    yaml.dump(FLAGS.flag_values_dict(), f, default_flow_style=False)
 
   with open(os.path.join(checkpoint_dir, 'git-rev'), 'w') as f:
     subprocess.call(['git', 'rev-parse', 'HEAD'], stdout=f)
@@ -212,7 +208,7 @@ def initialize(sess, checkpoint_dir=None):
       tf.uniform_unit_scaling_initializer(factor=1.8 * FLAGS.init_weight))
   model = NeuralGPU(config)
   data.print_out("Created model.")
-  sess.run(tf.initialize_all_variables())
+  sess.run(tf.global_variables_initializer())
   data.print_out("Initialized variables.")
 
   # Load model from parameters if a checkpoint exists.
