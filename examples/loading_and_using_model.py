@@ -1,8 +1,8 @@
-import numpy as np
-import tensorflow as tf
-
 import os
 import sys
+
+import tensorflow as tf
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from neuralgpu import trainer, generators
 

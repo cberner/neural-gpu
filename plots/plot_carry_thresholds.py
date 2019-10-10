@@ -1,6 +1,7 @@
 import glob
-import pylab
+
 import numpy as np
+import pylab
 from matplotlib import rc
 
 rc('font',  size='9')

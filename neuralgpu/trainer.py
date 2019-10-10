@@ -16,28 +16,25 @@
 
 from __future__ import print_function
 
-import math
 import os
 import random
+import subprocess
 import sys
 import time
-import subprocess
-import yaml
 
-import matplotlib.animation as anim
-import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-
+import yaml
 from tensorflow.python.platform import gfile
 
-from . import data_utils as data
-from .generators import generators
-from .model import NeuralGPU
 from . import curriculum
+from . import data_utils as data
 from . import mytf
 from . import records
 from .config import NeuralConfig
+from .generators import generators
+from .model import NeuralGPU
+
 
 def define_flags():
   """This is placed in a function so reload() works"""

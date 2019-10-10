@@ -21,15 +21,10 @@ This file has two main components:
 """
 
 import math
-import random
 import sys
-import time
-import operator
-import functools
+
 import numpy as np
 import tensorflow as tf
-
-from tensorflow.python.platform import gfile
 
 FLAGS = tf.app.flags.FLAGS
 

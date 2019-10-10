@@ -13,15 +13,13 @@ With '-t', in 'thresholds' it places the minimum threshold at which the success 
 """
 
 from __future__ import print_function
-import tensorflow as tf
-import numpy as np
-import operator
-import pandas
-import random
-import time
-import os
+
 import glob
+import os
 import sys
+
+import numpy as np
+import tensorflow as tf
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from neuralgpu import trainer, data_utils

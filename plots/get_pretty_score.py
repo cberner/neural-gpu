@@ -1,27 +1,25 @@
 #!/usr/bin/python
 from __future__ import print_function
-import fileinput
 
-import sys
-import numpy as np
-import pandas as pd
 import argparse
-import glob
-import scipy.signal
-import os
-import yaml
-import shutil
-import joblib
-import functools
-import re
-import pickle
-
 import collections
-import pylab
-from matplotlib import rc
+import functools
+import os
+import pickle
+import re
+import shutil
+import sys
+
+import joblib
 import matplotlib
 import matplotlib.gridspec as gridspec
 import matplotlib.ticker as mtick
+import numpy as np
+import pandas as pd
+import pylab
+import scipy.signal
+import yaml
+from matplotlib import rc
 
 rc('font',  size='12')
 rc('text', usetex=True)

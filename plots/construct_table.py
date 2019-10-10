@@ -1,17 +1,14 @@
 #!/usr/bin/python3
 from __future__ import print_function
-import fileinput
 
-import sys
-import numpy as np
-import pandas as pd
 import argparse
-import glob
-import scipy.signal
-import os
-import yaml
-
 import collections
+import glob
+import os
+import sys
+
+import numpy as np
+import yaml
 
 parser = argparse.ArgumentParser(description='Get scores')
 

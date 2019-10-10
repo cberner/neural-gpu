@@ -2,9 +2,11 @@
 
 from __future__ import print_function
 
+import functools
+
 import tensorflow as tf
 from tensorflow.python.training import moving_averages
-import functools
+
 
 def broadcast_as(origin, target, axes=None):
   """Broadcast origin into the shape of target using numpy-style broadcasting.

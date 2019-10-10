@@ -1,15 +1,12 @@
 """Class for constructing problem inputs featuring lots of carries."""
 from __future__ import print_function
 
-import tensorflow as tf, numpy as np
-
 import operator
-import pandas
-import random
-import time
-import glob
-import sys
 import os
+import random
+import sys
+
+import pandas
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from neuralgpu import generators

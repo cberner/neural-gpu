@@ -1,11 +1,9 @@
 """Generators for the different problems."""
 
-import math
-import random
-import sys
-import time
-import operator
 import functools
+import operator
+import random
+
 import numpy as np
 
 from . import data_utils

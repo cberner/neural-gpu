@@ -4,6 +4,7 @@ See neuralgpu/trainer.py for flags and more information.
 """
 
 import tensorflow as tf
+
 from neuralgpu import trainer
 
 

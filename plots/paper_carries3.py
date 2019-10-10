@@ -1,7 +1,7 @@
+import matplotlib.ticker as mtick
 import pandas
 import pylab
 from matplotlib import rc
-import matplotlib.ticker as mtick
 
 rc('font',  size='9')
 rc('axes', labelsize='large')

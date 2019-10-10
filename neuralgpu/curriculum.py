@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import numpy as np
 
+
 class Curriculum(object):
   def __init__(self, generators, model_config):
     self.generators = generators
