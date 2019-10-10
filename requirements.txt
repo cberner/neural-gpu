@@ -1,0 +1,3 @@
+PyYAML
+matplotlib
+tensorflow==0.12.0
